@@ -1,9 +1,10 @@
 import { Action } from '@ngrx/store';
-import { IProvideWarshipPlan } from '../../lib/battleships/contracts';
+import {BattleFieldPosition, IProvideWarshipPlan} from '../../lib/battleships/contracts';
 
 export enum HarbourActionTypes {
   HarbourAction = '[Harbour] Action',
-  ChooseWarshipPlan = '[Harbour] Choose Warship Plan'
+  ChooseWarshipPlan = '[Harbour] Choose Warship Plan',
+  UpdateWarshipPosition = '[Harbour] Update Warship Position'
 }
 
 export class Harbour implements Action {
@@ -16,4 +17,10 @@ export class ChooseWarshipPlan implements Action {
   constructor(public payload: IProvideWarshipPlan) {}
 }
 
-export type HarbourActions = Harbour | ChooseWarshipPlan;
+export class UpdateWarshipPosition implements Action {
+  readonly type = HarbourActionTypes.UpdateWarshipPosition;
+
+  constructor(public payload: BattleFieldPosition[]) {}
+}
+
+export type HarbourActions = Harbour | ChooseWarshipPlan | UpdateWarshipPosition;

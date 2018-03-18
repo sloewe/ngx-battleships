@@ -2,12 +2,12 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { combineLatest } from 'rxjs/observable/combineLatest';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 import { Coordinate, Warhsip, WarshipSkeleton } from '../../../lib/battleships';
 import { BattleFieldPosition, IProvideWarshipPlan } from '../../../lib/battleships/contracts';
-import { Store } from '@ngrx/store';
-import { ChooseWarshipPlan } from '../../actions/harbour.actions';
+import { select, Store} from '@ngrx/store';
+import { ChooseWarshipPlan, UpdateWarshipPosition } from '../../actions/harbour.actions';
 import * as fromHarbour from '../../reducers';
 
 @Component({
@@ -42,7 +42,12 @@ export class CraftWarshipComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.warshipPlan$ = this._store.select(s => s.harbour.warshipPlan);
+    this.warshipPlan$ = this._store.pipe(select(fromHarbour.all),
+        tap(all => {
+            this.updateCoordinatesForm(all.plan);
+            this._fillCoordinateForm(all.currentPosition);
+        }),
+        map(all => all.plan));
   }
 
   updateCoordinatesForm(selectedPlan: IProvideWarshipPlan) {
@@ -52,7 +57,7 @@ export class CraftWarshipComponent implements OnInit {
     combineLatest(coordinates.controls.map(c => c.valueChanges))
       .pipe(map(() => this._enteredCoodinates))
       .subscribe(
-        positions => console.log(positions) /* update coordinates in store */
+        positions => this._store.dispatch(new UpdateWarshipPosition(positions))
       );
   }
 
@@ -78,10 +83,10 @@ export class CraftWarshipComponent implements OnInit {
     });
   }
 
-  private _provideCoordinateControls(amunt: number): FormControl[] {
+  private _provideCoordinateControls(amount: number): FormControl[] {
     const coordinateControls = [];
 
-    for (let i = 0; i < amunt; i++) {
+    for (let i = 0; i < amount; i++) {
       coordinateControls.push(this._fb.control(new Coordinate(0, 0)));
     }
 
