@@ -8,6 +8,7 @@ import { Coordinate, Warhsip, WarshipSkeleton } from '../../../lib/battleships';
 import { BattleFieldPosition, IProvideWarshipPlan } from '../../../lib/battleships/contracts';
 import { Store } from '@ngrx/store';
 import { ChooseWarshipPlan } from '../../actions/harbour.actions';
+import * as fromHarbour from '../../reducers';
 
 @Component({
   selector: 'bs-craft-warship',
@@ -36,12 +37,13 @@ export class CraftWarshipComponent implements OnInit {
     );
   }
 
-  constructor(private _fb: FormBuilder, private _store: Store<any>) {
-    this._store.select(s => s).subscribe(console.log);
+  constructor(private _fb: FormBuilder, private _store: Store<fromHarbour.State>) {
     this.warshipForm = this._provideCoordinateForm();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.warshipPlan$ = this._store.select(s => s.harbour.warshipPlan);
+  }
 
   updateCoordinatesForm(selectedPlan: IProvideWarshipPlan) {
     const coordinates = this.warshipForm.get('coordinates') as FormArray;
