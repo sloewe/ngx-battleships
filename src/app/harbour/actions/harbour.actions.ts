@@ -5,7 +5,8 @@ export enum HarbourActionTypes {
   HarbourAction = '[Harbour] Action',
   ChooseWarshipPlan = '[Harbour] Choose Warship Plan',
   ChooseWarshipPlanSuccess = '[Harbour] Choose Warship Plan Success',
-  UpdateWarshipPosition = '[Harbour] Update Warship Position'
+  UpdateWarshipPosition = '[Harbour] Update Warship Position',
+  UpdateWarshipPositionSuccess = '[Harbour] Update Warship Position Success'
 }
 
 export class Harbour implements Action {
@@ -30,4 +31,10 @@ export class UpdateWarshipPosition implements Action {
   constructor(public payload: BattleFieldPosition[]) {}
 }
 
-export type HarbourActions = Harbour | ChooseWarshipPlan | ChooseWarshipPlanSuccess | UpdateWarshipPosition;
+export class UpdateWarshipPositionSuccess implements Action {
+  readonly type = HarbourActionTypes.UpdateWarshipPositionSuccess;
+
+  constructor(public payload: BattleFieldPosition[]) {}
+}
+
+export type HarbourActions = Harbour | ChooseWarshipPlan | ChooseWarshipPlanSuccess | UpdateWarshipPosition | UpdateWarshipPositionSuccess;

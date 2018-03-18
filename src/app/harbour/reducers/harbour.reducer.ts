@@ -22,7 +22,7 @@ export function reducer(state = initialState, action: HarbourActions): Slice {
           position: []
       };
 
-    case HarbourActionTypes.UpdateWarshipPosition:
+    case HarbourActionTypes.UpdateWarshipPositionSuccess:
       return {
           ... state,
           position: action.payload
