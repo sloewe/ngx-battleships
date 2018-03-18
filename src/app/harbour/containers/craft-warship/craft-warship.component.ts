@@ -7,7 +7,7 @@ import { map, tap } from 'rxjs/operators';
 import { Coordinate, Warhsip, WarshipSkeleton } from '../../../lib/battleships';
 import { BattleFieldPosition, IProvideWarshipPlan } from '../../../lib/battleships/contracts';
 import { select, Store} from '@ngrx/store';
-import { ChooseWarshipPlan, UpdateWarshipPosition } from '../../actions/harbour.actions';
+import {ChooseWarshipPlan, RecoverWarshipPlan, UpdateWarshipPosition} from '../../actions/harbour.actions';
 import * as fromHarbour from '../../reducers';
 
 @Component({
@@ -48,6 +48,8 @@ export class CraftWarshipComponent implements OnInit {
           this._fillCoordinateForm(all.currentPosition);
       }),
       map(all => all.plan));
+
+    this._store.dispatch(new RecoverWarshipPlan());
   }
 
   updateCoordinatesForm(selectedPlan: IProvideWarshipPlan) {

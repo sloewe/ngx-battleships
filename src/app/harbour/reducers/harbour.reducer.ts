@@ -1,5 +1,5 @@
 import { Action, createFeatureSelector, createSelector} from '@ngrx/store';
-import { ChooseWarshipPlan, HarbourActions, HarbourActionTypes} from '../actions/harbour.actions';
+import { ChooseWarshipPlan, HarbourActions, HarbourActionTypes } from '../actions/harbour.actions';
 import { BattleFieldPosition, IProvideWarshipPlan} from '../../lib/battleships/contracts';
 
 export interface Slice {
@@ -28,8 +28,11 @@ export function reducer(state = initialState, action: HarbourActions): Slice {
           position: action.payload
       };
 
-    case HarbourActionTypes.HarbourAction:
-      return state;
+    case HarbourActionTypes.RecoverWarshipPlanSuccess:
+      return {
+          ... state,
+          warshipPlan: action.payload
+      };
 
     default:
       return state;

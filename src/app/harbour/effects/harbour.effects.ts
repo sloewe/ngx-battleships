@@ -3,12 +3,13 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import {
     ChooseWarshipPlan,
     ChooseWarshipPlanSuccess,
-    HarbourActionTypes,
+    HarbourActionTypes, RecoverWarshipPlan, RecoverWarshipPlanSuccess,
     UpdateWarshipPosition,
     UpdateWarshipPositionSuccess
 } from '../actions/harbour.actions';
 import { switchMap, map } from 'rxjs/operators';
 import { LocalStorage } from '../../lib/local-storage';
+import {IProvideWarshipPlan} from '../../lib/battleships/contracts';
 
 @Injectable()
 export class HarbourEffects {
@@ -32,6 +33,16 @@ export class HarbourEffects {
                 this._storage.set('current-position', action.payload).pipe(
                     map(position => new UpdateWarshipPositionSuccess(position))
                 )
+            )
+        );
+
+    @Effect()
+    recoverWarshipPlan$ = this.actions$
+        .pipe(
+            ofType(HarbourActionTypes.RecoverWarshipPlan),
+            switchMap((action: RecoverWarshipPlan) =>
+                this._storage.get<IProvideWarshipPlan>('current-plan')
+                    .pipe(map(warshipPlan => new RecoverWarshipPlanSuccess(warshipPlan)))
             )
         );
 
