@@ -43,18 +43,18 @@ export class CraftWarshipComponent implements OnInit {
 
   ngOnInit(): void {
     this.warshipPlan$ = this._store.pipe(select(fromHarbour.all),
-        tap(all => {
-            this.updateCoordinatesForm(all.plan);
-            this._fillCoordinateForm(all.currentPosition);
-        }),
-        map(all => all.plan));
+      tap(all => {
+          this.updateCoordinatesForm(all.plan);
+          this._fillCoordinateForm(all.currentPosition);
+      }),
+      map(all => all.plan));
   }
 
   updateCoordinatesForm(selectedPlan: IProvideWarshipPlan) {
     const coordinates = this.warshipForm.get('coordinates') as FormArray;
     coordinates.controls = this._provideCoordinateControls(selectedPlan.parts);
 
-    combineLatest(coordinates.controls.map(c => c.valueChanges))
+      combineLatest(coordinates.controls.map(c => c.valueChanges))
       .pipe(map(() => this._enteredCoodinates))
       .subscribe(
         positions => this._store.dispatch(new UpdateWarshipPosition(positions))
