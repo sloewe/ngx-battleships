@@ -6,6 +6,8 @@ import { map } from 'rxjs/operators';
 
 import { Coordinate, Warhsip, WarshipSkeleton } from '../../../lib/battleships';
 import { BattleFieldPosition, IProvideWarshipPlan } from '../../../lib/battleships/contracts';
+import { Store } from '@ngrx/store';
+import { ChooseWarshipPlan } from '../../actions/harbour.actions';
 
 @Component({
   selector: 'bs-craft-warship',
@@ -34,7 +36,8 @@ export class CraftWarshipComponent implements OnInit {
     );
   }
 
-  constructor(private _fb: FormBuilder) {
+  constructor(private _fb: FormBuilder, private _store: Store<any>) {
+    this._store.select(s => s).subscribe(console.log);
     this.warshipForm = this._provideCoordinateForm();
   }
 
@@ -51,9 +54,9 @@ export class CraftWarshipComponent implements OnInit {
       );
   }
 
-  changeWharshipPlan(shipSkeleton: WarshipSkeleton) {
-    this.updateCoordinatesForm(shipSkeleton);
-    /** change warship plan in store */
+  changeWharshipPlan(warshipPlan: WarshipSkeleton) {
+    this.updateCoordinatesForm(warshipPlan);
+    this._store.dispatch(new ChooseWarshipPlan(warshipPlan));
   }
 
   craftWarship() {
